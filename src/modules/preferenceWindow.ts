@@ -210,7 +210,6 @@ function buildPrefsPane() {
           ztoolkit.ExtraField.setExtraField(item, "abstractTranslation", "");
         });
     });
-
 }
 
 function updatePrefsPaneDefault() {

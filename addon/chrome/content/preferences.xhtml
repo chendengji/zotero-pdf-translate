@@ -13,72 +13,8 @@
       native="true"
       preference="__prefsPrefix__.enableAuto"
     />
-    <vbox>
-      <checkbox
-        id="__addonRef__-enableComment"
-        data-l10n-id="pref-basic-enableComment"
-        native="true"
-        preference="__prefsPrefix__.enableComment"
-      />
-      <radiogroup
-        id="__addonRef__-annotationTranslationPosition"
-        class="auto-annotation"
-        style="padding-left: 18px"
-        native="true"
-        preference="__prefsPrefix__.annotationTranslationPosition"
-      >
-        <radio
-          data-l10n-id="pref-basic-annotationTranslationInComment"
-          value="comment"
-        />
-        <radio
-          data-l10n-id="pref-basic-annotationTranslationInBody"
-          value="body"
-        />
-      </radiogroup>
-      <radiogroup
-        id="__addonRef__-annotationTranslationPositionInBody"
-        class="annotation-translation-position-in-body"
-        style="padding-left: 36px"
-        orient="horizontal"
-        native="true"
-        preference="__prefsPrefix__.annotationTranslationPositionInBody"
-      >
-        <radio
-          data-l10n-id="pref-basic-annotationTranslationInBodyBeforeText"
-          value="before"
-        />
-        <radio
-          data-l10n-id="pref-basic-annotationTranslationInBodyAfterText"
-          value="after"
-        />
-      </radiogroup>
-      <checkbox
-        id="__addonRef__-enableAnnotationFromSyncTranslation"
-        data-l10n-id="pref-basic-enableAnnotationFromSyncTranslation"
-        style="padding-left: 18px"
-        native="true"
-        preference="__prefsPrefix__.enableAnnotationFromSyncTranslation"
-      />
-    </vbox>
-    <vbox>
-      <checkbox
-        id="__addonRef__-enableAutoTagAnnotation"
-        data-l10n-id="pref-basic-enableAutoTagAnnotation"
-        style="padding-left: 18px"
-        native="true"
-        preference="__prefsPrefix__.enableAutoTagAnnotation"
-      />
-      <hbox align="center" style="padding-left: 36px">
-        <label data-l10n-id="pref-basic-annotationTagContent"></label>
-        <html:input
-          id="__addonRef__-annotationTagContent"
-          type="text"
-          class="enable-auto-tag-annotation"
-          preference="__prefsPrefix__.annotationTagContent"
-        ></html:input>
-      </hbox>
-    </vbox>
+
+
     <vbox>
       <checkbox
         id="__addonRef__-enablePopup"
@@ -94,22 +30,7 @@
         native="true"
         preference="__prefsPrefix__.enableHidePopupTextarea"
       />
-      <checkbox
-        id="__addonRef__-enableAddToNote"
-        data-l10n-id="pref-basic-enableNote"
-        class="enable-popup"
-        style="padding-left: 18px"
-        native="true"
-        preference="__prefsPrefix__.enableNote"
-      />
-      <checkbox
-        id="__addonRef__-enableNoteReplaceMode"
-        data-l10n-id="pref-basic-enableNoteReplaceMode"
-        class="enable-popup enable-popup-addtonote"
-        style="padding-left: 18px"
-        native="true"
-        preference="__prefsPrefix__.enableNoteReplaceMode"
-      />
+
     </vbox>
     <vbox>
       <checkbox
@@ -159,23 +80,7 @@
       native="true"
       preference="__prefsPrefix__.attachPaperContext"
     />
-    <checkbox
-      id="__addonRef__-useWordService"
-      data-l10n-id="pref-service-useWordService"
-      native="true"
-      preference="__prefsPrefix__.enableDict"
-    />
-    <hbox align="center">
-      <label data-l10n-id="pref-service-wordServices"></label>
-      <!-- Replace -->
-      <box id="__addonRef__-wordServices-placeholder"></box>
-      <label data-l10n-id="pref-service-wordServicesSecret"></label>
-      <html:input
-        type="text"
-        id="__addonRef__-wordServicesSecret"
-        class="use-word-service"
-      ></html:input>
-    </hbox>
+
   </groupbox>
   <groupbox>
     <label><html:h2 data-l10n-id="pref-interface"></html:h2></label>
@@ -195,16 +100,7 @@
         preference="__prefsPrefix__.lineHeight"
       ></html:input>
     </hbox>
-    <checkbox
-      data-l10n-id="pref-interface-showItemMenuTitleTranslation"
-      native="true"
-      preference="__prefsPrefix__.showItemMenuTitleTranslation"
-    />
-    <checkbox
-      data-l10n-id="pref-interface-showItemMenuAbstractTranslation"
-      native="true"
-      preference="__prefsPrefix__.showItemMenuAbstractTranslation"
-    />
+
     <checkbox
       data-l10n-id="pref-interface-showSidebarEngine"
       native="true"
@@ -257,21 +153,8 @@
       native="true"
       preference="__prefsPrefix__.showSidebarCopy"
     />
-    <checkbox
-      data-l10n-id="pref-interface-showItemBoxTitleTranslation"
-      native="true"
-      preference="__prefsPrefix__.showItemBoxTitleTranslation"
-    />
-    <checkbox
-      data-l10n-id="pref-interface-showItemBoxAbstractTranslation"
-      native="true"
-      preference="__prefsPrefix__.showItemBoxAbstractTranslation"
-    />
-    <checkbox
-      data-l10n-id="pref-interface-keepWindowTop"
-      native="true"
-      preference="__prefsPrefix__.keepWindowTop"
-    />
+
+
     <checkbox
       data-l10n-id="pref-interface-keepPopupSize"
       native="true"
@@ -302,13 +185,7 @@
         style="min-width: 80px"
       ></html:input>
     </hbox>
-    <hbox align="center">
-      <label data-l10n-id="pref-advanced-extraEngines"></label>
-      <html:input
-        type="text"
-        preference="__prefsPrefix__.extraEngines"
-      ></html:input>
-    </hbox>
+
     <hbox align="center">
       <label data-l10n-id="pref-advanced-splitChar"></label>
       <html:input

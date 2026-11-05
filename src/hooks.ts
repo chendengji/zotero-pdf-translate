@@ -4,28 +4,18 @@ import {
   registerPrefsScripts,
   registerPrefsWindow,
 } from "./modules/preferenceWindow";
-import {
-  registerReaderTabPanel,
-  updateReaderTabPanels,
-} from "./modules/tabpanel";
 import { buildReaderPopup, updateReaderPopup } from "./modules/popup";
 import { registerNotify } from "./modules/notify";
 import { registerReaderInitializer } from "./modules/reader";
-import { getPref } from "./utils/prefs";
 import {
-  addTranslateAnnotationTask,
   addTranslateTask,
-  addTranslateTitleTask,
   getLastTranslateTask,
   TranslateTask,
 } from "./utils/task";
 import { setDefaultPrefSettings } from "./modules/defaultPrefs";
+import { getPref } from "./utils/prefs";
 import Addon from "./addon";
-import { registerMenu } from "./modules/menu";
-import { registerExtraColumns } from "./modules/itemTree";
 import { registerShortcuts } from "./modules/shortcuts";
-import { registerItemPaneInfoRows } from "./modules/infoBox";
-import { registerCustomFields } from "./modules/fields";
 
 async function onStartup() {
   await Promise.all([
@@ -45,8 +35,6 @@ async function onStartup() {
 
   setDefaultPrefSettings();
 
-  registerCustomFields();
-
   registerReaderInitializer();
 
   registerShortcuts();
@@ -54,12 +42,6 @@ async function onStartup() {
   registerNotify(["item"]);
 
   registerPrefsWindow();
-
-  registerExtraColumns();
-
-  registerItemPaneInfoRows();
-
-  registerReaderTabPanel();
 
   await Promise.all(
     Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
@@ -92,8 +74,6 @@ async function onMainWindowLoad(win: Window): Promise<void> {
   (win as any).MozXULElement.insertFTLIfNeeded(
     `${config.addonRef}-mainWindow.ftl`,
   );
-
-  registerMenu();
 
   win.document.addEventListener("focusout", (ev) => {
     if (ev.target !== win.document) {
@@ -130,27 +110,7 @@ function onNotify(
   ids: Array<string | number>,
   extraData: { [key: string]: any },
 ) {
-  if (event === "add" && type === "item") {
-    if (
-      !getPref("enableAnnotationFromSyncTranslation") &&
-      extraData?.skipAutoSync
-    )
-      return;
-    const annotationItems = Zotero.Items.get(ids as number[]).filter((item) =>
-      item.isAnnotation(),
-    );
-    if (annotationItems.length === 0) {
-      return;
-    }
-    if (getPref("enableComment")) {
-      addon.hooks.onTranslateInBatch(
-        annotationItems
-          .map((item) => addTranslateAnnotationTask(item.id))
-          .filter((task) => task) as TranslateTask[],
-        { noDisplay: true },
-      );
-    }
-  } else if (type === "tab" && ["select", "add", "close"].includes(event)) {
+  if (type === "tab" && ["select", "add", "close"].includes(event)) {
     addon.data.translate.concatKey = false;
   } else {
     return;
@@ -163,17 +123,6 @@ function onPrefsLoad(event: Event) {
 
 function onShortcuts(type: string) {
   switch (type) {
-    case "library":
-      {
-        addon.hooks.onTranslateInBatch(
-          Zotero.getActiveZoteroPane()
-            .getSelectedItems(true)
-            .map((id) => addTranslateTitleTask(id, true))
-            .filter((task) => task) as TranslateTask[],
-          { noDisplay: true, noCache: true },
-        );
-      }
-      break;
     case "reader":
       {
         addon.hooks.onTranslate(undefined, {
@@ -249,9 +198,8 @@ function onReaderPopupRefresh() {
   updateReaderPopup();
 }
 
-function onReaderTabPanelRefresh() {
-  updateReaderTabPanels();
-}
+// 条目面板翻译面板已删除（tabpanel.ts 移除）；保留空分发点供 api/preferenceWindow/services 调用。
+function onReaderTabPanelRefresh() {}
 
 // Add your hooks here. For element click, etc.
 // Keep in mind hooks only do dispatch. Don't add code that does real jobs in hooks.

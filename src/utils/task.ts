@@ -230,30 +230,6 @@ export function addTranslateTask(
   }
 
   addon.data.translate.queue.push(newTask);
-  // In case window panel requires extra translations
-  if (
-    type === "text" &&
-    addon.data.panel.windowPanel &&
-    !addon.data.panel.windowPanel.closed
-  ) {
-    (getPref("extraEngines") as string)
-      .split(",")
-      .filter((s) => s)
-      .forEach((extraService) =>
-        newTask.extraTasks.push({
-          id: `${Zotero.Utilities.randomString()}-${new Date().getTime()}`,
-          type: "text",
-          raw,
-          result: "",
-          audio: [],
-          service: extraService,
-          candidateServices: [],
-          extraTasks: [],
-          itemId,
-          status: "waiting",
-        }),
-      );
-  }
   // Keep queue size
   cleanTasks();
   return newTask;

@@ -18,11 +18,6 @@ class Addon {
     prefs: {
       window: Window | null;
     };
-    panel: {
-      tabOptionId: string;
-      activePanels: Record<string, (options: any) => void>;
-      windowPanel: Window | null;
-    };
     popup: {
       currentPopup: HTMLDivElement | null;
     };
@@ -51,7 +46,6 @@ class Addon {
       ztoolkit: createZToolkit(),
       locale: {},
       prefs: { window: null },
-      panel: { tabOptionId: "", activePanels: {}, windowPanel: null },
       popup: { currentPopup: null },
       translate: {
         selectedText: "",

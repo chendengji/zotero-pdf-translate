@@ -2,7 +2,7 @@ import { SVGIcon } from "../utils/config";
 import { config } from "../../package.json";
 import { getString } from "../utils/locale";
 import { getPref, setPref } from "../utils/prefs";
-import { addTranslateTask, getLastTranslateTask } from "../utils/task";
+import { getLastTranslateTask } from "../utils/task";
 import { slice } from "../utils/str";
 
 export function updateReaderPopup() {
@@ -27,9 +27,6 @@ export function updateReaderPopup() {
   const textarea = popup?.querySelector(
     `#${makeId("text")}`,
   ) as HTMLTextAreaElement;
-  const addToNoteButton = popup?.querySelector(
-    `#${makeId("addtonote")}`,
-  ) as HTMLDivElement;
 
   const updateHidden = (elem: HTMLElement, hidden: boolean) => {
     if (hidden) {
@@ -43,7 +40,6 @@ export function updateReaderPopup() {
     updateHidden(audiobox, true);
     updateHidden(translateButton, true);
     updateHidden(textarea, true);
-    updateHidden(addToNoteButton, true);
     return;
   }
   const task = getLastTranslateTask({ type: "text" });
@@ -105,14 +101,6 @@ export function updateReaderPopup() {
     Number(getPref("lineHeight")) * Number(getPref("fontSize"))
   }px`;
 
-  const enableAddToNote = getPref("enableNote") as boolean;
-  if (
-    !Zotero.getMainWindow().ZoteroContextPane.activeEditor ||
-    !enableAddToNote
-  ) {
-    updateHidden(addToNoteButton, true);
-  }
-
   updatePopupSize(popup, textarea);
 }
 
@@ -120,7 +108,6 @@ export function buildReaderPopup(
   event: _ZoteroTypes.Reader.EventParams<"renderTextSelectionPopup">,
 ) {
   const { reader, doc, append } = event;
-  const annotation = event.params.annotation;
   const popup = doc.querySelector(".selection-popup") as HTMLDivElement;
   addon.data.popup.currentPopup = popup;
   popup.style.maxWidth = "none";
@@ -128,8 +115,6 @@ export function buildReaderPopup(
     `${config.addonRef}-prefix`,
     `${config.addonRef}-${reader._instanceID}`,
   );
-
-  const ZoteroContextPane = Zotero.getMainWindow().ZoteroContextPane;
 
   const colors = popup.querySelector(".colors") as HTMLDivElement;
   colors.style.width = "100%";
@@ -269,62 +254,6 @@ export function buildReaderPopup(
                     type: "default",
                   })
                   .show();
-              },
-            },
-          ],
-        },
-        {
-          tag: "button",
-          namespace: "html",
-          id: makeId("addtonote"),
-          classList: [
-            "toolbar-button",
-            "wide-button",
-            `${config.addonRef}-readerpopup`,
-          ],
-          styles: {
-            marginTop: "8px",
-          },
-          properties: {
-            innerHTML: `${SVGIcon}${getString("readerpopup-addToNote-label")}`,
-          },
-          ignoreIfExists: true,
-          listeners: [
-            {
-              type: "click",
-              listener: async (ev) => {
-                const noteEditor =
-                  ZoteroContextPane && ZoteroContextPane.activeEditor;
-                if (!noteEditor) {
-                  return;
-                }
-                const editorInstance = noteEditor.getCurrentInstance();
-                if (!editorInstance) {
-                  return;
-                }
-                const task = addTranslateTask(
-                  addon.data.translate.selectedText,
-                  reader.itemID,
-                  "addtonote",
-                );
-                if (!task) {
-                  return;
-                }
-                await addon.hooks.onTranslate(task, {
-                  noCheckZoteroItemLanguage: true,
-                  noDisplay: true,
-                });
-                if (task.status !== "success") {
-                  return;
-                }
-                const replaceMode = getPref("enableNoteReplaceMode") as boolean;
-                if (replaceMode) {
-                  annotation.text = task.result;
-                } else {
-                  annotation.comment = task.result;
-                }
-                // @ts-ignore should be fixed in the zotero-types
-                reader._addToNote([annotation]);
               },
             },
           ],

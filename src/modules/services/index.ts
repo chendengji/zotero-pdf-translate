@@ -15,19 +15,13 @@ import { ChatGPT, customGPT1, customGPT2, customGPT3, azureGPT } from "./gpt";
 import { Baidu } from "./baidu";
 import { BaiduField } from "./baidufield";
 import { Bing } from "./bing";
-import { BingDict } from "./bingdict";
 import { Caiyun } from "./caiyun";
-import { CambridgeDict } from "./cambridgedict";
 import { Claude } from "./claude";
 import { Cnki } from "./cnki";
-import { CollinsDict } from "./collinsdict";
 import { DeeplFree, DeeplPro } from "./deepl";
-import { FreeDictionaryAPI } from "./freedictionaryapi";
 import { Gemini } from "./gemini";
 import { Google, GoogleAPI } from "./google";
 import { Haici } from "./haici";
-import { HaiciDict } from "./haicidict";
-import { GramotaDict } from "./gramotadict";
 import { Huoshan } from "./huoshan";
 import { HuoshanWeb } from "./huoshanweb";
 import { Iciba } from "./iciba";
@@ -40,34 +34,29 @@ import { Nllb } from "./nllb";
 import { Openl } from "./openl";
 import { Pot } from "./pot";
 import { QwenMT } from "./qwenmt";
-import { WeblioDict } from "./webliodict";
 import { XFfrans } from "./xftrans";
 import { TencentTransmart } from "./tencenttransmart";
 import { Youdao } from "./youdao";
-import { YoudaoDict } from "./youdaodict";
 import { YoudaoZhiyun } from "./youdaozhiyun";
 import { YoudaoZhiyunLLM } from "./youdaozhiyunllm";
 import { DeepLCustom } from "./deeplcustom";
 import { DeepLX } from "./deeplx";
+import { SenseNova } from "./sensenova";
 
 const register: TranslateService[] = [
   Aliyun,
   Baidu,
   BaiduField,
   Bing,
-  BingDict,
   Caiyun,
-  CambridgeDict,
   Claude,
   Cnki,
-  CollinsDict,
   DeeplFree,
   DeeplPro,
   DeepLCustom,
   DeepLX,
-  FreeDictionaryAPI,
   Gemini,
-  GramotaDict,
+  SenseNova,
   Google,
   GoogleAPI,
   ChatGPT,
@@ -76,7 +65,6 @@ const register: TranslateService[] = [
   customGPT3,
   azureGPT,
   Haici,
-  HaiciDict,
   Huoshan,
   HuoshanWeb,
   Iciba,
@@ -91,10 +79,8 @@ const register: TranslateService[] = [
   QwenMT,
   Tencent,
   TencentTransmart,
-  WeblioDict,
   XFfrans,
   Youdao,
-  YoudaoDict,
   YoudaoZhiyun,
   YoudaoZhiyunLLM,
 ];

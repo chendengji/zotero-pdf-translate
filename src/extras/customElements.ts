@@ -1,8 +1,6 @@
-import { TranslatorPanel } from "../elements/panel";
 import { MathTextboxElement } from "../elements/mathTextbox";
 
 const elements = {
-  "translator-plugin-panel": TranslatorPanel,
   "math-textbox": MathTextboxElement,
 } as unknown as Record<string, CustomElementConstructor>;
 

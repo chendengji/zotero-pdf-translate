@@ -24,13 +24,19 @@ import {
 } from "../glossary";
 
 const DEFAULT_ENDPOINT =
-  "https://api.sensenova.cn/compatible-mode/v1/chat/completions";
-const DEFAULT_MODEL = "Sensenova-6.8-Flash-Lite";
+  "https://token.sensenova.cn/v1/chat/completions";
+const DEFAULT_MODEL = "sensenova-6.8-flash";
 
 async function sensenovaTranslate(
   data: Parameters<TranslateService["translate"]>[0],
 ): Promise<void> {
   const secret = getServiceSecret("sensenova");
+  if (!secret) {
+    throw new Error(
+      getString("service-sensenova-missingSecret") ||
+        "SenseNova API key is not configured. Open plugin settings and fill in the key.",
+    );
+  }
   const endpoint =
     (getPref("sensenova.endpoint") as string) || DEFAULT_ENDPOINT;
   const model = (getPref("sensenova.model") as string) || DEFAULT_MODEL;
@@ -102,7 +108,6 @@ async function sensenovaTranslate(
 export const SenseNova: TranslateService = {
   id: "sensenova",
   type: "sentence",
-  name: getString("service-sensenova"),
   helpUrl: "https://platform.sensenova.cn/",
   defaultSecret: "",
   secretValidator(secret: string) {

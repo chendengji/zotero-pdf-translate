@@ -189,28 +189,6 @@ function buildPrefsPane() {
       onPrefsEvents("updatelineHeight");
     });
 
-  doc
-    .querySelector(`#${makeId("reset-titleTranslation")}`)
-    ?.addEventListener("command", (e: Event) => {
-      ztoolkit
-        .getGlobal("ZoteroPane")
-        .getSelectedItems()
-        .forEach((item) => {
-          ztoolkit.ExtraField.setExtraField(item, "titleTranslation", "");
-        });
-    });
-
-  doc
-    .querySelector(`#${makeId("reset-abstractTranslation")}`)
-    ?.addEventListener("command", (e: Event) => {
-      ztoolkit
-        .getGlobal("ZoteroPane")
-        .getSelectedItems()
-        .forEach((item) => {
-          ztoolkit.ExtraField.setExtraField(item, "abstractTranslation", "");
-        });
-    });
-
 }
 
 function updatePrefsPaneDefault() {

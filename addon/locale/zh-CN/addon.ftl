@@ -213,3 +213,4 @@ service-sensenova-dialog-model = 模型
 service-sensenova-dialog-temperature = 温度
 service-sensenova-dialog-useGlossary = 使用自成长术语库
 service-sensenova-dialog-hint = 结构化翻译：障碍判断→拆解→最终翻译；术语自动积累到术语库。
+service-sensenova-missingSecret = SenseNova API 密钥未配置，请在插件设置中填写。

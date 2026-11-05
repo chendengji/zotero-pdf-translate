@@ -213,3 +213,4 @@ service-sensenova-dialog-model = Model
 service-sensenova-dialog-temperature = Temperature
 service-sensenova-dialog-useGlossary = Use self-growing glossary
 service-sensenova-dialog-hint = Structured translation: obstacle diagnosis → breakdown → final translation; terms auto-accumulated into the glossary.
+service-sensenova-missingSecret = SenseNova API key is not configured. Open plugin settings and fill in the key.

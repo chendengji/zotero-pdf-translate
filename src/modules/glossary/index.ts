@@ -27,15 +27,14 @@ export interface GlossaryTerm {
 const FILE = "glossary.json";
 
 function glossaryPath(): string {
-  return OS.Path.join(String(Zotero.DataDirectory), FILE);
+  // Zotero.DataDirectory 是 Zotero 数据目录（如 C:\Users\...\Zotero），glossary.json 存于此
+  return String(Zotero.DataDirectory) + "/" + FILE;
 }
 
 async function readRaw(): Promise<GlossaryTerm[]> {
-  const path = glossaryPath();
   try {
-    const content = (await OS.File.read(path, {
-      encoding: "utf-8",
-    })) as string;
+    const file = Zotero.File.pathToFile(glossaryPath());
+    const content = (await Zotero.File.getContentsAsync(file)) as string;
     if (!content) return [];
     const parsed = JSON.parse(content);
     return Array.isArray(parsed) ? parsed : [];
@@ -46,11 +45,9 @@ async function readRaw(): Promise<GlossaryTerm[]> {
 }
 
 async function writeRaw(terms: GlossaryTerm[]): Promise<void> {
-  const path = glossaryPath();
   try {
-    await OS.File.writeAtomic(path, JSON.stringify(terms, null, 2), {
-      encoding: "utf-8",
-    });
+    const file = Zotero.File.pathToFile(glossaryPath());
+    await Zotero.File.putContents(file, JSON.stringify(terms, null, 2));
   } catch (e) {
     // 写失败不阻塞翻译主流程，仅告警
     ztoolkit.log(`[glossary] write failed: ${e}`);

@@ -242,6 +242,7 @@ export type FluentMessageId =
   | 'service-sensenova-dialog-model'
   | 'service-sensenova-dialog-temperature'
   | 'service-sensenova-dialog-useGlossary'
+  | 'service-sensenova-missingSecret'
   | 'service-tencent'
   | 'service-tencent-dialog-projectid'
   | 'service-tencent-dialog-region'

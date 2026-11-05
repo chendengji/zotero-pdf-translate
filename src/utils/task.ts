@@ -306,6 +306,8 @@ export function addTranslateAbstractTask(
 const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
 
 function setDefaultService(task: TranslateTask) {
+  // @ts-ignore - Plugin instance is not typed
+  const services = addon.data.translate.services;
   if (getPref("enableDict")) {
     let wordCount = 0;
     for (const s of segmenter.segment(task.raw.trim())) {
@@ -319,7 +321,10 @@ function setDefaultService(task: TranslateTask) {
     }
     if (wordCount === 1) {
       task.service = getPref("dictSource") as string;
-      task.candidateServices.push(getPref("translateSource") as string);
+      // 词典查词失败 → 依次轮询所有句子翻译服务兜底
+      task.candidateServices.push(
+        ...services.getAllServicesWithType("sentence").map((s) => s.id),
+      );
     } else {
       task.service = getPref("translateSource") as string;
     }
@@ -327,8 +332,15 @@ function setDefaultService(task: TranslateTask) {
     task.service = getPref("translateSource") as string;
   }
 
-  task.service =
-    task.service || addon.data.translate.services.getAllServices()[0].id;
+  task.service = task.service || services.getAllServices()[0].id;
+
+  // 句子翻译保底：首选服务失败 → 依次轮询其他句子翻译服务直到成功
+  const sentenceIds = services
+    .getAllServicesWithType("sentence")
+    .map((s) => s.id);
+  task.candidateServices.push(
+    ...sentenceIds.filter((id) => id && id !== task.service),
+  );
 }
 
 function cleanTasks() {

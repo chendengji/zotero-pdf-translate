@@ -9,80 +9,59 @@ import {
   stripEmptyLines,
 } from "../../utils";
 
-import { Aliyun } from "./aliyun";
-import { Tencent } from "./tencent";
-import { ChatGPT, customGPT1, customGPT2, customGPT3, azureGPT } from "./gpt";
-import { Baidu } from "./baidu";
-import { BaiduField } from "./baidufield";
 import { Bing } from "./bing";
 import { Caiyun } from "./caiyun";
-import { Claude } from "./claude";
 import { Cnki } from "./cnki";
-import { DeeplFree, DeeplPro } from "./deepl";
-import { Gemini } from "./gemini";
 import { Google, GoogleAPI } from "./google";
 import { Haici } from "./haici";
-import { Huoshan } from "./huoshan";
 import { HuoshanWeb } from "./huoshanweb";
 import { Iciba } from "./iciba";
 import { LibreTranslate } from "./libretranslate";
-import { Microsoft } from "./microsoft";
 import { Mtranserver } from "./mtranserver";
 import { MyMemory } from "./mymemory";
-import { Niutrans } from "./niutrans";
 import { Nllb } from "./nllb";
-import { Openl } from "./openl";
 import { Pot } from "./pot";
-import { QwenMT } from "./qwenmt";
-import { XFfrans } from "./xftrans";
 import { TencentTransmart } from "./tencenttransmart";
 import { Youdao } from "./youdao";
-import { YoudaoZhiyun } from "./youdaozhiyun";
-import { YoudaoZhiyunLLM } from "./youdaozhiyunllm";
 import { DeepLCustom } from "./deeplcustom";
 import { DeepLX } from "./deeplx";
 import { SenseNova } from "./sensenova";
+import { BingDict } from "./bingdict";
+import { CambridgeDict } from "./cambridgedict";
+import { CollinsDict } from "./collinsdict";
+import { FreeDictionaryAPI } from "./freedictionaryapi";
+import { GramotaDict } from "./gramotadict";
+import { HaiciDict } from "./haicidict";
+import { WeblioDict } from "./webliodict";
+import { YoudaoDict } from "./youdaodict";
 
 const register: TranslateService[] = [
-  Aliyun,
-  Baidu,
-  BaiduField,
   Bing,
+  BingDict,
+  CambridgeDict,
+  CollinsDict,
+  FreeDictionaryAPI,
+  GramotaDict,
+  HaiciDict,
+  WeblioDict,
+  YoudaoDict,
   Caiyun,
-  Claude,
   Cnki,
-  DeeplFree,
-  DeeplPro,
   DeepLCustom,
   DeepLX,
-  Gemini,
   SenseNova,
   Google,
   GoogleAPI,
-  ChatGPT,
-  customGPT1,
-  customGPT2,
-  customGPT3,
-  azureGPT,
   Haici,
-  Huoshan,
   HuoshanWeb,
   Iciba,
   LibreTranslate,
-  Microsoft,
   Mtranserver,
   MyMemory,
-  Niutrans,
   Nllb,
-  Openl,
   Pot,
-  QwenMT,
-  Tencent,
   TencentTransmart,
-  XFfrans,
   Youdao,
-  YoudaoZhiyun,
-  YoudaoZhiyunLLM,
 ];
 
 export class TranslationServices {
@@ -299,17 +278,26 @@ export class TranslationServices {
     }
 
     if (!cacheHit) {
-      // Get task service
-      const service = this.getServiceById(task.service);
-      if (!service) {
-        task.result = `${task.service} is not implemented.`;
-        task.status = "fail";
-        return false;
+      // 轮询池：首选服务 + 候选服务（失败时依次回退，直到成功）
+      const candidates = [
+        task.service,
+        ...task.candidateServices.filter((id) => id && id !== task.service),
+      ];
+      let lastError = "";
+      for (const serviceId of candidates) {
+        const service = this.getServiceById(serviceId);
+        if (!service) continue;
+        task.service = serviceId;
+        const runner = new TranslateTaskRunner(service.translate);
+        await runner.run(task);
+        if (task.status === "success") break;
+        lastError = task.result;
+        // 尝试下一个候选，清空残留错误
+        task.result = "";
       }
-
-      // Run task
-      const runner = new TranslateTaskRunner(service.translate);
-      await runner.run(task);
+      if (task.status !== "success") {
+        task.result = lastError || `${task.service} is not implemented.`;
+      }
 
       // Apply strip empty lines if enabled
       const stripEnabled = getPref("stripEmptyLines") as boolean;

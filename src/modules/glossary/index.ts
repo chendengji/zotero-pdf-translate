@@ -64,7 +64,12 @@ export async function readGlossary(): Promise<GlossaryTerm[]> {
 }
 
 export async function appendGlossary(
-  gloss: Array<{ en: string; zh: string; domain?: string; confidence?: number }>,
+  gloss: Array<{
+    en: string;
+    zh: string;
+    domain?: string;
+    confidence?: number;
+  }>,
 ): Promise<void> {
   if (!gloss || !gloss.length) return;
   const terms = await readRaw();
@@ -94,7 +99,9 @@ export async function appendGlossary(
     }
   }
   // 防无限膨胀：上限 2000 条，超出按 count 保留
-  const capped = terms.sort((a, b) => (b.count ?? 0) - (a.count ?? 0)).slice(0, 2000);
+  const capped = terms
+    .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+    .slice(0, 2000);
   await writeRaw(capped);
 }
 

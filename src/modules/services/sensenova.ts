@@ -82,9 +82,7 @@ async function sensenovaTranslate(
   const json = await resp.json();
   const j = json as any;
   const content: string =
-    j?.choices?.[0]?.message?.content ??
-    j?.output?.text ??
-    "";
+    j?.choices?.[0]?.message?.content ?? j?.output?.text ?? "";
   const result = parseStructuredResult(content);
 
   if (result && result.translation) {
